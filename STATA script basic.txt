@@ -1,0 +1,10 @@
+cmset id set alternative
+global zlist land cost labor loan
+global ylist choice
+global alternative alternative
+generate lncost = -1*cost 
+global lnnormalden "lncost"
+tabulate $ylist
+summarize $id $alternative $ylist $xlist
+cmclogit choice land lncost labor loan
+estat ic, n(2720)

@@ -1,0 +1,12 @@
+cmset id set alternative
+global zlist land cost labor loan
+global ylist choice
+global alternative alternative
+global xlist gender fex edu lsz fin
+generate lncost = -1*cost 
+global lnnormalden "lncost"
+tabulate $ylist
+summarize $id $alternative $ylist $xlist
+cmclogit choice land lncost labor loan, casevars(gender fex edu lsz fin)
+estat ic, n(2720)
+margins, at(gender=(0 1)) contrast(at(r) nowald) over(set)
