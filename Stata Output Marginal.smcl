@@ -1,0 +1,240 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\erlan\Documents\Thesis\data\stata_thesis\Stata Output Marginal.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}14 Jul 2023, 11:04:11
+
+{com}. import delimited "C:\Users\erlan\Documents\Data\Example Code\SetDecision - 5 ROWS - Copy - Copy.csv"
+{res}{txt}(encoding automatically selected: ISO-8859-1)
+{text}(16 vars, 2,720 obs)
+
+{com}. import delimited "C:\Users\erlan\Documents\Data\Example Code\SetDecision - 5 ROWS - Copy - Copy.csv", clear 
+{res}{txt}(encoding automatically selected: ISO-8859-1)
+{text}(16 vars, 2,720 obs)
+
+{com}. do "C:\Users\erlan\AppData\Local\Temp\STD5150_000000.tmp"
+{txt}
+{com}. cmset id set alternative
+{res}{txt}{p 0 6 2}note: case identifier {bf:_caseid} generated from {bf:id} and {bf:set}.{p_end}
+{p 0 6 2}note: panel by alternatives identifier {bf:_panelaltid} generated from {bf:id} and {bf: alternative}.{p_end}
+{res}
+{p 20 20 2}{text}Panel data: Panels {res:id} and time {res:set}{p_end}
+{col 15}Case ID variable: {res}_caseid
+{txt}{col 10}Alternatives variable: {res}alternative
+{col 1}{txt:Panel by alternatives variable: }{res:_panelaltid}{txt: (strongly balanced)}
+{p 17 32 2}{txt:Time variable: }{res:set}{txt:, }{res:{bind:1}}{txt: to }{res:{bind:4}}{p_end}
+{txt}{col 26}Delta: {res}1 unit
+
+{txt}Note: Data have been {bf:xtset}.
+
+{com}. global zlist land cost labor loan
+{txt}
+{com}. global ylist choice
+{txt}
+{com}. global alternative alternative
+{txt}
+{com}. global xlist gender fex edu lsz fin
+{txt}
+{com}. generate lncost = -1*cost 
+{txt}
+{com}. global lnnormalden "lncost"
+{txt}
+{com}. tabulate $ylist
+
+     {txt}choice {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}      2,176       80.00       80.00
+{txt}          1 {c |}{res}        544       20.00      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      2,720      100.00
+{txt}
+{com}. summarize $id $alternative $ylist $xlist
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 1}alternative {c |}{res}      2,720           3    1.414474          1          5
+{txt}{space 6}choice {c |}{res}      2,720          .2    .4000735          0          1
+{txt}{space 6}gender {c |}{res}      2,720    .5147059    .4998756          0          1
+{txt}{space 9}fex {c |}{res}      2,720    2.882353    1.071609          1          4
+{txt}{space 9}edu {c |}{res}      2,720    1.441176    .8641842          0          4
+{txt}{hline 13}{c +}{hline 57}
+{space 9}lsz {c |}{res}      2,720    2.176471    1.063503          1          4
+{txt}{space 9}fin {c |}{res}      2,720    2.426471    1.246591          1          5
+{txt}
+{com}. cmclogit choice land lncost labor loan, casevars(gender fex edu lsz fin)
+{txt}{p 0 6 2}note: data were {bf:cmset} as panel data, and the default {it:vcetype} for panel data is {bf:{bind:vce(cluster id)}}; see {helpb cmclogit}.{p_end}
+{res}
+{txt}Iteration 0:{space 3}log pseudolikelihood = {res:-772.86785}  
+Iteration 1:{space 3}log pseudolikelihood = {res:-765.89501}  
+Iteration 2:{space 3}log pseudolikelihood = {res:-765.83239}  
+Iteration 3:{space 3}log pseudolikelihood = {res:-765.83238}  
+{res}
+{txt}Conditional logit choice model{col 48}Number of obs{col 67}= {res}     2,720
+{txt}Case ID variable: _caseid{col 48}Number of cases{col 67}= {res}       544
+
+{txt}Alternatives variable: alternative{col 48}Alts per case: min = {res}         5
+{col 63}{txt}avg = {res}       5.0
+{col 63}{txt}max = {res}         5
+
+{txt}{col 51}Wald chi2({res}24{txt}){col 67}= {res}     60.84
+{txt}Log pseudolikelihood = {res}-765.83238{col 51}{txt}Prob > chi2{col 67}= {res}    0.0000
+
+{txt}{ralign 78:(Std. err. adjusted for {res:136} clusters in {res:id})}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      choice{col 14}{c |} Coefficient{col 26}  std. err.{col 38}      z{col 46}   P>|z|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}alternative  {txt}{c |}
+{space 8}land {c |}{col 14}{res}{space 2}-.3770141{col 26}{space 2} .0983273{col 37}{space 1}   -3.83{col 46}{space 3}0.000{col 54}{space 4}-.5697321{col 67}{space 3}-.1842961
+{txt}{space 6}lncost {c |}{col 14}{res}{space 2} .0005383{col 26}{space 2} .0001536{col 37}{space 1}    3.50{col 46}{space 3}0.000{col 54}{space 4} .0002372{col 67}{space 3} .0008394
+{txt}{space 7}labor {c |}{col 14}{res}{space 2}-.2550021{col 26}{space 2}  .125301{col 37}{space 1}   -2.04{col 46}{space 3}0.042{col 54}{space 4}-.5005876{col 67}{space 3}-.0094167
+{txt}{space 8}loan {c |}{col 14}{res}{space 2} -.405123{col 26}{space 2} .1712472{col 37}{space 1}   -2.37{col 46}{space 3}0.018{col 54}{space 4}-.7407614{col 67}{space 3}-.0694846
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}{res}1           {col 14}{txt}{c |}  (base alternative)
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}2            {txt}{c |}
+{space 6}gender {c |}{col 14}{res}{space 2} -.178738{col 26}{space 2}  .153527{col 37}{space 1}   -1.16{col 46}{space 3}0.244{col 54}{space 4}-.4796454{col 67}{space 3} .1221695
+{txt}{space 9}fex {c |}{col 14}{res}{space 2}-.0732261{col 26}{space 2} .0702019{col 37}{space 1}   -1.04{col 46}{space 3}0.297{col 54}{space 4}-.2108192{col 67}{space 3} .0643671
+{txt}{space 9}edu {c |}{col 14}{res}{space 2}-.0382892{col 26}{space 2} .0755691{col 37}{space 1}   -0.51{col 46}{space 3}0.612{col 54}{space 4}-.1864018{col 67}{space 3} .1098235
+{txt}{space 9}lsz {c |}{col 14}{res}{space 2} -.031707{col 26}{space 2} .0757011{col 37}{space 1}   -0.42{col 46}{space 3}0.675{col 54}{space 4}-.1800783{col 67}{space 3} .1166643
+{txt}{space 9}fin {c |}{col 14}{res}{space 2} .0518826{col 26}{space 2} .0653554{col 37}{space 1}    0.79{col 46}{space 3}0.427{col 54}{space 4}-.0762117{col 67}{space 3} .1799769
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .5292059{col 26}{space 2} .3033982{col 37}{space 1}    1.74{col 46}{space 3}0.081{col 54}{space 4}-.0654437{col 67}{space 3} 1.123856
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}3            {txt}{c |}
+{space 6}gender {c |}{col 14}{res}{space 2} -.168799{col 26}{space 2} .3588703{col 37}{space 1}   -0.47{col 46}{space 3}0.638{col 54}{space 4} -.872172{col 67}{space 3} .5345739
+{txt}{space 9}fex {c |}{col 14}{res}{space 2} .0131587{col 26}{space 2} .1847385{col 37}{space 1}    0.07{col 46}{space 3}0.943{col 54}{space 4}-.3489221{col 67}{space 3} .3752395
+{txt}{space 9}edu {c |}{col 14}{res}{space 2}-.2361011{col 26}{space 2} .1893056{col 37}{space 1}   -1.25{col 46}{space 3}0.212{col 54}{space 4}-.6071333{col 67}{space 3} .1349312
+{txt}{space 9}lsz {c |}{col 14}{res}{space 2}-.3698712{col 26}{space 2} .1633636{col 37}{space 1}   -2.26{col 46}{space 3}0.024{col 54}{space 4} -.690058{col 67}{space 3}-.0496844
+{txt}{space 9}fin {c |}{col 14}{res}{space 2}  .058609{col 26}{space 2} .1305515{col 37}{space 1}    0.45{col 46}{space 3}0.653{col 54}{space 4}-.1972672{col 67}{space 3} .3144852
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .7861179{col 26}{space 2} .6255776{col 37}{space 1}    1.26{col 46}{space 3}0.209{col 54}{space 4}-.4399916{col 67}{space 3} 2.012227
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}4            {txt}{c |}
+{space 6}gender {c |}{col 14}{res}{space 2} .4116216{col 26}{space 2}  .390481{col 37}{space 1}    1.05{col 46}{space 3}0.292{col 54}{space 4} -.353707{col 67}{space 3}  1.17695
+{txt}{space 9}fex {c |}{col 14}{res}{space 2}  .163872{col 26}{space 2} .1902267{col 37}{space 1}    0.86{col 46}{space 3}0.389{col 54}{space 4}-.2089654{col 67}{space 3} .5367095
+{txt}{space 9}edu {c |}{col 14}{res}{space 2}-.1842857{col 26}{space 2} .2486082{col 37}{space 1}   -0.74{col 46}{space 3}0.459{col 54}{space 4}-.6715489{col 67}{space 3} .3029775
+{txt}{space 9}lsz {c |}{col 14}{res}{space 2}-.1129985{col 26}{space 2} .1908953{col 37}{space 1}   -0.59{col 46}{space 3}0.554{col 54}{space 4}-.4871465{col 67}{space 3} .2611495
+{txt}{space 9}fin {c |}{col 14}{res}{space 2}-.0422614{col 26}{space 2} .1901564{col 37}{space 1}   -0.22{col 46}{space 3}0.824{col 54}{space 4} -.414961{col 67}{space 3} .3304383
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-.5100994{col 26}{space 2}  .904267{col 37}{space 1}   -0.56{col 46}{space 3}0.573{col 54}{space 4} -2.28243{col 67}{space 3} 1.262231
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}5            {txt}{c |}
+{space 6}gender {c |}{col 14}{res}{space 2}-.6535967{col 26}{space 2} .3786344{col 37}{space 1}   -1.73{col 46}{space 3}0.084{col 54}{space 4}-1.395707{col 67}{space 3} .0885132
+{txt}{space 9}fex {c |}{col 14}{res}{space 2} .1453526{col 26}{space 2} .1567829{col 37}{space 1}    0.93{col 46}{space 3}0.354{col 54}{space 4}-.1619362{col 67}{space 3} .4526414
+{txt}{space 9}edu {c |}{col 14}{res}{space 2}-.0673313{col 26}{space 2} .2448551{col 37}{space 1}   -0.27{col 46}{space 3}0.783{col 54}{space 4}-.5472385{col 67}{space 3}  .412576
+{txt}{space 9}lsz {c |}{col 14}{res}{space 2}-.0286673{col 26}{space 2} .1696197{col 37}{space 1}   -0.17{col 46}{space 3}0.866{col 54}{space 4}-.3611159{col 67}{space 3} .3037813
+{txt}{space 9}fin {c |}{col 14}{res}{space 2} .1753223{col 26}{space 2} .1608202{col 37}{space 1}    1.09{col 46}{space 3}0.276{col 54}{space 4}-.1398795{col 67}{space 3} .4905242
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-1.539919{col 26}{space 2} .7987457{col 37}{space 1}   -1.93{col 46}{space 3}0.054{col 54}{space 4}-3.105432{col 67}{space 3} .0255937
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. margins, at(gender=0 1)
+{res}{err}variable {bf:1} not found in list of covariates
+{txt}{search r(322), local:r(322);}
+
+end of do-file
+
+{search r(322), local:r(322);}
+
+{com}. margins, at(gender=(0 1))
+{res}
+{txt}Predictive margins{col 58}{lalign 13:Number of obs}{col 71} = {res}{ralign 5:2,720}
+{txt}{col 1}Model VCE: {res:Robust}
+
+{txt}{p2colset 1 13 13 2}{...}
+{p2col:Expression:}{res:Pr(alternative|1 selected), predict()}{p_end}
+{p2colreset}{...}
+
+{lalign 7:1._at: }{space 0}{lalign 6:gender} = {res:{ralign 1:0}}
+
+{lalign 7:2._at: }{space 0}{lalign 6:gender} = {res:{ralign 1:1}}
+
+{res}{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26} Delta-method
+{col 14}{c |}     Margin{col 26}   std. err.{col 38}      z{col 46}   P>|z|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+_outcome#_at {c |}
+{space 8}1 1  {c |}{col 14}{res}{space 2} .1786681{col 26}{space 2} .0246421{col 37}{space 1}    7.25{col 46}{space 3}0.000{col 54}{space 4} .1303705{col 67}{space 3} .2269657
+{txt}{space 8}1 2  {c |}{col 14}{res}{space 2} .2293364{col 26}{space 2} .0220236{col 37}{space 1}   10.41{col 46}{space 3}0.000{col 54}{space 4}  .186171{col 67}{space 3} .2725019
+{txt}{space 8}2 1  {c |}{col 14}{res}{space 2} .2193294{col 26}{space 2} .0273269{col 37}{space 1}    8.03{col 46}{space 3}0.000{col 54}{space 4} .1657696{col 67}{space 3} .2728892
+{txt}{space 8}2 2  {c |}{col 14}{res}{space 2} .2376883{col 26}{space 2} .0257579{col 37}{space 1}    9.23{col 46}{space 3}0.000{col 54}{space 4} .1872037{col 67}{space 3} .2881729
+{txt}{space 8}3 1  {c |}{col 14}{res}{space 2}  .082568{col 26}{space 2} .0182941{col 37}{space 1}    4.51{col 46}{space 3}0.000{col 54}{space 4} .0467123{col 67}{space 3} .1184237
+{txt}{space 8}3 2  {c |}{col 14}{res}{space 2} .0900577{col 26}{space 2}  .019228{col 37}{space 1}    4.68{col 46}{space 3}0.000{col 54}{space 4} .0523715{col 67}{space 3}  .127744
+{txt}{space 8}4 1  {c |}{col 14}{res}{space 2} .0749161{col 26}{space 2} .0204833{col 37}{space 1}    3.66{col 46}{space 3}0.000{col 54}{space 4} .0347695{col 67}{space 3} .1150627
+{txt}{space 8}4 2  {c |}{col 14}{res}{space 2} .1430047{col 26}{space 2} .0291162{col 37}{space 1}    4.91{col 46}{space 3}0.000{col 54}{space 4}  .085938{col 67}{space 3} .2000714
+{txt}{space 8}5 1  {c |}{col 14}{res}{space 2} .4445184{col 26}{space 2} .0564598{col 37}{space 1}    7.87{col 46}{space 3}0.000{col 54}{space 4} .3338591{col 67}{space 3} .5551776
+{txt}{space 8}5 2  {c |}{col 14}{res}{space 2} .2999128{col 26}{space 2} .0488817{col 37}{space 1}    6.14{col 46}{space 3}0.000{col 54}{space 4} .2041064{col 67}{space 3} .3957193
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{com}. estat ic, n(2720)
+
+{txt}Akaike's information criterion and Bayesian information criterion
+
+{hline 13}{c TT}{hline 63}
+       Model {c |}          N   ll(null)  ll(model)      df        AIC        BIC
+{hline 13}{c +}{hline 63}
+{ralign 12:.}{col 14}{c |}{res}{col 16}     2,720{col 28}        .{col 39}-765.8324{col 50}    28{col 58} 1587.665{col 69}   1753.1
+{txt}{hline 13}{c BT}{hline 63}
+
+{com}. 
+. margins, at(gender=(0 1)) contrast(at(r) nowald) over(set)
+{res}
+{txt}Contrasts of predictive margins{col 58}{lalign 13:Number of obs}{col 71} = {res}{ralign 5:2,720}
+{txt}{col 1}Model VCE: {res:Robust}
+
+{txt}{p2colset 1 13 13 2}{...}
+{p2col:Expression:}{res:Pr(alternative|1 selected), predict()}{p_end}
+{p2col:Over:}{res:set}{p_end}
+{p2colreset}{...}
+
+1._at: {space 0}{res:1.set}
+{lalign 7:}{space 4}{lalign 6:gender} = {res:{ralign 1:0}}
+1._at: {space 0}{res:2.set}
+{lalign 7:}{space 4}{lalign 6:gender} = {res:{ralign 1:0}}
+1._at: {space 0}{res:3.set}
+{lalign 7:}{space 4}{lalign 6:gender} = {res:{ralign 1:0}}
+1._at: {space 0}{res:4.set}
+{lalign 7:}{space 4}{lalign 6:gender} = {res:{ralign 1:0}}
+
+2._at: {space 0}{res:1.set}
+{lalign 7:}{space 4}{lalign 6:gender} = {res:{ralign 1:1}}
+2._at: {space 0}{res:2.set}
+{lalign 7:}{space 4}{lalign 6:gender} = {res:{ralign 1:1}}
+2._at: {space 0}{res:3.set}
+{lalign 7:}{space 4}{lalign 6:gender} = {res:{ralign 1:1}}
+2._at: {space 0}{res:4.set}
+{lalign 7:}{space 4}{lalign 6:gender} = {res:{ralign 1:1}}
+
+{res}{txt}{hline 17}{c TT}{hline 11}{hline 11}{hline 14}{hline 12}
+{col 18}{c |}{col 30} Delta-method
+{col 18}{c |}   Contrast{col 30}   std. err.{col 42}     [95% con{col 55}f. interval]
+{hline 17}{c +}{hline 11}{hline 11}{hline 14}{hline 12}
+_at@_outcome#set {c |}
+{space 3}(2 vs 1) 1 1  {c |}{col 18}{res}{space 2} .0642717{col 30}{space 2} .0409734{col 41}{space 5}-.0160347{col 55}{space 3} .1445781
+{txt}{space 3}(2 vs 1) 1 2  {c |}{col 18}{res}{space 2} .0382762{col 30}{space 2} .0234434{col 41}{space 5}-.0076721{col 55}{space 3} .0842245
+{txt}{space 3}(2 vs 1) 1 3  {c |}{col 18}{res}{space 2} .0492073{col 30}{space 2} .0435908{col 41}{space 5} -.036229{col 55}{space 3} .1346436
+{txt}{space 3}(2 vs 1) 1 4  {c |}{col 18}{res}{space 2} .0509182{col 30}{space 2} .0341466{col 41}{space 5}-.0160079{col 55}{space 3} .1178443
+{txt}{space 3}(2 vs 1) 2 1  {c |}{col 18}{res}{space 2} .0190385{col 30}{space 2} .0406866{col 41}{space 5}-.0607057{col 55}{space 3} .0987827
+{txt}{space 3}(2 vs 1) 2 2  {c |}{col 18}{res}{space 2} .0328401{col 30}{space 2} .0599188{col 41}{space 5}-.0845986{col 55}{space 3} .1502787
+{txt}{space 3}(2 vs 1) 2 3  {c |}{col 18}{res}{space 2} .0031109{col 30}{space 2} .0243611{col 41}{space 5}-.0446361{col 55}{space 3} .0508578
+{txt}{space 3}(2 vs 1) 2 4  {c |}{col 18}{res}{space 2} .0184461{col 30}{space 2} .0353712{col 41}{space 5}-.0508801{col 55}{space 3} .0877723
+{txt}{space 3}(2 vs 1) 3 1  {c |}{col 18}{res}{space 2} .0061843{col 30}{space 2} .0228405{col 41}{space 5}-.0385823{col 55}{space 3} .0509508
+{txt}{space 3}(2 vs 1) 3 2  {c |}{col 18}{res}{space 2} .0038826{col 30}{space 2} .0147617{col 41}{space 5}-.0250498{col 55}{space 3}  .032815
+{txt}{space 3}(2 vs 1) 3 3  {c |}{col 18}{res}{space 2} .0017057{col 30}{space 2} .0211695{col 41}{space 5}-.0397857{col 55}{space 3}  .043197
+{txt}{space 3}(2 vs 1) 3 4  {c |}{col 18}{res}{space 2} .0181862{col 30}{space 2} .0488281{col 41}{space 5} -.077515{col 55}{space 3} .1138875
+{txt}{space 3}(2 vs 1) 4 1  {c |}{col 18}{res}{space 2} .0521891{col 30}{space 2} .0286928{col 41}{space 5}-.0040478{col 55}{space 3} .1084259
+{txt}{space 3}(2 vs 1) 4 2  {c |}{col 18}{res}{space 2} .0519605{col 30}{space 2} .0307984{col 41}{space 5}-.0084033{col 55}{space 3} .1123243
+{txt}{space 3}(2 vs 1) 4 3  {c |}{col 18}{res}{space 2} .1131584{col 30}{space 2} .0582285{col 41}{space 5}-.0009674{col 55}{space 3} .2272842
+{txt}{space 3}(2 vs 1) 4 4  {c |}{col 18}{res}{space 2} .0550465{col 30}{space 2} .0289803{col 41}{space 5}-.0017538{col 55}{space 3} .1118468
+{txt}{space 3}(2 vs 1) 5 1  {c |}{col 18}{res}{space 2}-.1416835{col 30}{space 2}  .080116{col 41}{space 5} -.298708{col 55}{space 3} .0153409
+{txt}{space 3}(2 vs 1) 5 2  {c |}{col 18}{res}{space 2}-.1269593{col 30}{space 2} .0769431{col 41}{space 5}-.2777651{col 55}{space 3} .0238465
+{txt}{space 3}(2 vs 1) 5 3  {c |}{col 18}{res}{space 2}-.1671822{col 30}{space 2} .0812236{col 41}{space 5}-.3263776{col 55}{space 3}-.0079868
+{txt}{space 3}(2 vs 1) 5 4  {c |}{col 18}{res}{space 2} -.142597{col 30}{space 2}  .080686{col 41}{space 5}-.3007388{col 55}{space 3} .0155447
+{txt}{hline 17}{c BT}{hline 11}{hline 11}{hline 14}{hline 12}
+{res}
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\erlan\Documents\Thesis\data\stata_thesis\Stata Output Marginal.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}14 Jul 2023, 11:09:33
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

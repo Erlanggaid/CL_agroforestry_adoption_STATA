@@ -1,0 +1,114 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\erlan\Documents\Thesis\data\stata_thesis\Stata Output Male.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}12 Jul 2023, 15:55:27
+
+{com}. do "C:\Users\erlan\AppData\Local\Temp\STD6500_000000.tmp"
+{txt}
+{com}. cmset id set alternative
+{res}{txt}{p 0 6 2}note: case identifier {bf:_caseid} generated from {bf:id} and {bf:set}.{p_end}
+{p 0 6 2}note: panel by alternatives identifier {bf:_panelaltid} generated from {bf:id} and {bf: alternative}.{p_end}
+{res}
+{p 20 20 2}{text}Panel data: Panels {res:id} and time {res:set}{p_end}
+{col 15}Case ID variable: {res}_caseid
+{txt}{col 10}Alternatives variable: {res}alternative
+{col 1}{txt:Panel by alternatives variable: }{res:_panelaltid}{txt: (strongly balanced)}
+{p 17 32 2}{txt:Time variable: }{res:set}{txt:, }{res:{bind:1}}{txt: to }{res:{bind:4}}{p_end}
+{txt}{col 26}Delta: {res}1 unit
+
+{txt}Note: Data have been {bf:xtset}.
+
+{com}. global zlist land cost labor loan
+{txt}
+{com}. global ylist choice
+{txt}
+{com}. global alternative alternative
+{txt}
+{com}. generate lncost = -1*cost 
+{txt}
+{com}. global lnnormalden "lncost"
+{txt}
+{com}. tabulate $ylist
+
+     {txt}choice {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}      1,119       79.93       79.93
+{txt}          1 {c |}{res}        281       20.07      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      1,400      100.00
+{txt}
+{com}. summarize $id $alternative $ylist $xlist
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 1}alternative {c |}{res}      1,400           3    1.414719          1          5
+{txt}{space 6}choice {c |}{res}      1,400    .2007143    .4006778          0          1
+{txt}
+{com}. cmclogit choice land lncost labor loan
+{txt}{p 0 6 2}note: data were {bf:cmset} as panel data, and the default {it:vcetype} for panel data is {bf:{bind:vce(cluster id)}}; see {helpb cmclogit}.{p_end}
+{p 0 6 2}note: 1 case{txt} (5 obs) dropped due to multiple positive outcomes per case.{p_end}
+{res}
+{txt}Iteration 0:{space 3}log pseudolikelihood = {res:-413.46298}  
+Iteration 1:{space 3}log pseudolikelihood = {res:    -412.1}  
+Iteration 2:{space 3}log pseudolikelihood = {res:-412.09357}  
+Iteration 3:{space 3}log pseudolikelihood = {res:-412.09357}  
+{res}
+{txt}Conditional logit choice model{col 48}Number of obs{col 67}= {res}     1,395
+{txt}Case ID variable: _caseid{col 48}Number of cases{col 67}= {res}       279
+
+{txt}Alternatives variable: alternative{col 48}Alts per case: min = {res}         5
+{col 63}{txt}avg = {res}       5.0
+{col 63}{txt}max = {res}         5
+
+{txt}{col 51}Wald chi2({res}4{txt}){col 67}= {res}     16.10
+{txt}Log pseudolikelihood = {res}-412.09357{col 51}{txt}Prob > chi2{col 67}= {res}    0.0029
+
+{txt}{ralign 78:(Std. err. adjusted for {res:70} clusters in {res:id})}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      choice{col 14}{c |} Coefficient{col 26}  std. err.{col 38}      z{col 46}   P>|z|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}alternative  {txt}{c |}
+{space 8}land {c |}{col 14}{res}{space 2}-.3167511{col 26}{space 2} .1232976{col 37}{space 1}   -2.57{col 46}{space 3}0.010{col 54}{space 4}-.5584099{col 67}{space 3}-.0750923
+{txt}{space 6}lncost {c |}{col 14}{res}{space 2}  .000472{col 26}{space 2} .0002101{col 37}{space 1}    2.25{col 46}{space 3}0.025{col 54}{space 4} .0000603{col 67}{space 3} .0008837
+{txt}{space 7}labor {c |}{col 14}{res}{space 2}-.1540117{col 26}{space 2} .1641559{col 37}{space 1}   -0.94{col 46}{space 3}0.348{col 54}{space 4}-.4757514{col 67}{space 3}  .167728
+{txt}{space 8}loan {c |}{col 14}{res}{space 2} -.436485{col 26}{space 2} .2210468{col 37}{space 1}   -1.97{col 46}{space 3}0.048{col 54}{space 4}-.8697288{col 67}{space 3}-.0032412
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}{res}1           {col 14}{txt}{c |}  (base alternative)
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}2            {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}  .097058{col 26}{space 2} .1424434{col 37}{space 1}    0.68{col 46}{space 3}0.496{col 54}{space 4}-.1821259{col 67}{space 3} .3762419
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}3            {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-.5191682{col 26}{space 2}  .321687{col 37}{space 1}   -1.61{col 46}{space 3}0.107{col 54}{space 4}-1.149663{col 67}{space 3} .1113267
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}4            {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-.4066519{col 26}{space 2} .1989111{col 37}{space 1}   -2.04{col 46}{space 3}0.041{col 54}{space 4}-.7965105{col 67}{space 3}-.0167933
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}5            {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} -1.28966{col 26}{space 2} .4895683{col 37}{space 1}   -2.63{col 46}{space 3}0.008{col 54}{space 4}-2.249196{col 67}{space 3}-.3301234
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. 
+{txt}end of do-file
+
+{com}. estat ic, n(1400)
+
+{txt}Akaike's information criterion and Bayesian information criterion
+
+{hline 13}{c TT}{hline 63}
+       Model {c |}          N   ll(null)  ll(model)      df        AIC        BIC
+{hline 13}{c +}{hline 63}
+{ralign 12:.}{col 14}{c |}{res}{col 16}     1,400{col 28}        .{col 39}-412.0936{col 50}     8{col 58} 840.1871{col 69}  882.141
+{txt}{hline 13}{c BT}{hline 63}
+
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\erlan\Documents\Thesis\data\stata_thesis\Stata Output Male.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}12 Jul 2023, 15:56:21
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

@@ -1,0 +1,117 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\erlan\Documents\Thesis\data\stata_thesis\Stata Output Basic.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}13 Jul 2023, 11:22:24
+
+{com}. do "C:\Users\erlan\AppData\Local\Temp\STD1020_000000.tmp"
+{txt}
+{com}. cmset id set alternative
+{res}{txt}{p 0 6 2}note: case identifier {bf:_caseid} generated from {bf:id} and {bf:set}.{p_end}
+{p 0 6 2}note: panel by alternatives identifier {bf:_panelaltid} generated from {bf:id} and {bf: alternative}.{p_end}
+{res}
+{p 20 20 2}{text}Panel data: Panels {res:id} and time {res:set}{p_end}
+{col 15}Case ID variable: {res}_caseid
+{txt}{col 10}Alternatives variable: {res}alternative
+{col 1}{txt:Panel by alternatives variable: }{res:_panelaltid}{txt: (strongly balanced)}
+{p 17 32 2}{txt:Time variable: }{res:set}{txt:, }{res:{bind:1}}{txt: to }{res:{bind:4}}{p_end}
+{txt}{col 26}Delta: {res}1 unit
+
+{txt}Note: Data have been {bf:xtset}.
+
+{com}. global zlist land cost labor loan
+{txt}
+{com}. global ylist choice
+{txt}
+{com}. global alternative alternative
+{txt}
+{com}. global xlist gender fex edu lsz fin
+{txt}
+{com}. generate lncost = -1*cost 
+{err}variable {bf}lncost{sf} already defined
+{txt}{search r(110), local:r(110);}
+
+end of do-file
+
+{search r(110), local:r(110);}
+
+{com}. global lnnormalden "lncost"
+
+. 
+. tabulate $ylist
+
+     {txt}choice {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}      2,176       80.00       80.00
+{txt}          1 {c |}{res}        544       20.00      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      2,720      100.00
+
+{com}. 
+. summarize $id $alternative $ylist $xlist
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 1}alternative {c |}{res}      2,720           3    1.414474          1          5
+{txt}{space 6}choice {c |}{res}      2,720          .2    .4000735          0          1
+{txt}{space 6}gender {c |}{res}      2,720    .5147059    .4998756          0          1
+{txt}{space 9}fex {c |}{res}      2,720    2.882353    1.071609          1          4
+{txt}{space 9}edu {c |}{res}      2,720    1.441176    .8641842          0          4
+{txt}{hline 13}{c +}{hline 57}
+{space 9}lsz {c |}{res}      2,720    2.176471    1.063503          1          4
+{txt}{space 9}fin {c |}{res}      2,720    2.426471    1.246591          1          5
+
+{com}. 
+. cmclogit choice land lncost labor loan
+{txt}{p 0 6 2}note: data were {bf:cmset} as panel data, and the default {it:vcetype} for panel data is {bf:{bind:vce(cluster id)}}; see {helpb cmclogit}.{p_end}
+{res}
+{txt}Iteration 0:{space 3}log pseudolikelihood = {res:-785.33359}  
+Iteration 1:{space 3}log pseudolikelihood = {res:-780.47372}  
+Iteration 2:{space 3}log pseudolikelihood = {res:-780.44896}  
+Iteration 3:{space 3}log pseudolikelihood = {res:-780.44895}  
+{res}
+{txt}Conditional logit choice model{col 48}Number of obs{col 67}= {res}     2,720
+{txt}Case ID variable: _caseid{col 48}Number of cases{col 67}= {res}       544
+
+{txt}Alternatives variable: alternative{col 48}Alts per case: min = {res}         5
+{col 63}{txt}avg = {res}       5.0
+{col 63}{txt}max = {res}         5
+
+{txt}{col 51}Wald chi2({res}4{txt}){col 67}= {res}     35.23
+{txt}Log pseudolikelihood = {res}-780.44895{col 51}{txt}Prob > chi2{col 67}= {res}    0.0000
+
+{txt}{ralign 78:(Std. err. adjusted for {res:136} clusters in {res:id})}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}      choice{col 14}{c |} Coefficient{col 26}  std. err.{col 38}      z{col 46}   P>|z|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}alternative  {txt}{c |}
+{space 8}land {c |}{col 14}{res}{space 2}-.3718541{col 26}{space 2} .0975318{col 37}{space 1}   -3.81{col 46}{space 3}0.000{col 54}{space 4}-.5630129{col 67}{space 3}-.1806953
+{txt}{space 6}lncost {c |}{col 14}{res}{space 2} .0005356{col 26}{space 2} .0001521{col 37}{space 1}    3.52{col 46}{space 3}0.000{col 54}{space 4} .0002374{col 67}{space 3} .0008337
+{txt}{space 7}labor {c |}{col 14}{res}{space 2}-.2544584{col 26}{space 2}  .123469{col 37}{space 1}   -2.06{col 46}{space 3}0.039{col 54}{space 4}-.4964532{col 67}{space 3}-.0124635
+{txt}{space 8}loan {c |}{col 14}{res}{space 2} -.402179{col 26}{space 2} .1710718{col 37}{space 1}   -2.35{col 46}{space 3}0.019{col 54}{space 4}-.7374736{col 67}{space 3}-.0668845
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}{res}1           {col 14}{txt}{c |}  (base alternative)
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}2            {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} .2235638{col 26}{space 2} .1101757{col 37}{space 1}    2.03{col 46}{space 3}0.042{col 54}{space 4} .0076234{col 67}{space 3} .4395043
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}3            {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-.2205942{col 26}{space 2} .2437986{col 37}{space 1}   -0.90{col 46}{space 3}0.366{col 54}{space 4}-.6984307{col 67}{space 3} .2572422
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}4            {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} -.389138{col 26}{space 2} .1611443{col 37}{space 1}   -2.41{col 46}{space 3}0.016{col 54}{space 4}-.7049751{col 67}{space 3} -.073301
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}5            {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-1.167464{col 26}{space 2} .3566738{col 37}{space 1}   -3.27{col 46}{space 3}0.001{col 54}{space 4}-1.866532{col 67}{space 3}-.4683961
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\erlan\Documents\Thesis\data\stata_thesis\Stata Output Basic.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}13 Jul 2023, 11:22:53
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
